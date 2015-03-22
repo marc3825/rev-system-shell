@@ -1,12 +1,12 @@
 #!/bin/sh
 version=0.81
 
-if [ $# -le 2 ] ; then
+if [ $# -lt 2 ] ; then
     echo -e "Usage: version.sh <cmd> <file> [option]\nwhere <cmd> can be: add checkout commit diff log revert rm"
     exit
 fi
 
-if [ -f $2 ]; then
+if [ ! -f $2 ]; then
     echo -e "Error! ’$2’ is not a file."
     exit
 fi
@@ -19,21 +19,20 @@ case $1 in
             mkdir .version
         fi
 
-        if [ ! -d .version/$2.1] ; then
+        if [ ! -d .version/$2.1 ] ; then
             cp -f $2 .version/$2.1
             cp -f $2 .version/$2.latest
             echo -e "Added a new file under versioning: ’$2’"
-        else ; then 
+        else 
             echo -e "$2 is already in the versioning system."
-            exit
         fi
         ;;
 
     checkout | co ) 
 
-        if [ $# -ne 3 ]
+        if [ $# -ne 3 ] ; then 
             echo "Usage: version.sh checkout <file> <revision>"
-        else ; then
+        else
             if [ -f .version/$2.$3 ] ; then
                 cp -f .version/$2.1 $2
                 patch -p0 < .version/$2.{`seq -s"," 2 $3`} 
@@ -49,12 +48,12 @@ case $1 in
         if [ cmp -s $2 .version/$2.latest ] ; then
             echo -e "No change in $2,"
             exit
-        else ; then
+        else
             rev=$(ls .version/$2.* | wc -l)+1
             ##diff -u .version/$2.`$rev -1` .version/$2.latest > .version/$2.$rev
-			diff -u .version/$2.latest $2 > .version/$2.$rev
+            diff -u .version/$2.latest $2 > .version/$2.$rev
             cp -f $2 .version/$2.latest
-            if [ $# -eq 3 ]
+            if [ $# -eq 3 ] ; then
                 echo "`date -R` | $3" >> .version/$2.log
             else
                 echo "`date -R` | Committed a new version: $rev" >> .version/$2.log
@@ -65,7 +64,7 @@ case $1 in
 
     diff ) 
 
-        if [ -f .version/$2.latest ]
+        if [ -f .version/$2.latest ] ; then
             diff -u .version/$2.latest $2
         else
             echo "No previous revision"
@@ -73,8 +72,8 @@ case $1 in
         ;;
 
     log ) 
-        
-        if [ -f .version/$2.log ]
+
+        if [ -f .version/$2.log ] ; then
             nl -s": " .version/$2.log
         else
             echo "No log file found for $2"
@@ -87,11 +86,11 @@ case $1 in
             if [ cmp -s $2 .version/$2.latest ] ; then 
                 echo "No change in the two version"
                 exit
-            else ; then
+            else
                 cp -f .version/$2.latest $2
                 echo -e "Reverted to the latest version"
             fi
-        else ; then
+        else
             echo -e "No previous revision"
             exit
         fi
@@ -103,11 +102,11 @@ case $1 in
         case $yn in
             ##Si $yn commence par yYoO, execute. Permet de faire passer oui/yes/y etc
             o* | O* | y* | Y* ) 
-				rm .version/$2.*
-				echo -e "’$1’ is not under versioning anymore."
-				##Salon, mais ne s'execute pas si le dossier contient qqchose :p
-				##Redirige la sortie erreur vers le void pour ne pas afficher de message
-				rmdir .version 2>/dev/null
+            rm .version/$2.*
+            echo -e "’$1’ is not under versioning anymore."
+            ##Salon, mais ne s'execute pas si le dossier contient qqchose :p
+            ##Redirige la sortie erreur vers le void pour ne pas afficher de message
+            rmdir .version 2>/dev/null
     esac
     ;;
 * ) echo -e "Error! This command name does not exist: ’$1’" ;;
