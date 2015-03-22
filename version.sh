@@ -37,7 +37,8 @@ case $1 in
             if [ -f .version/$2.$3 ] ; then
                 cp -f .version/$2.1 $2
                 #patch -p0 < .version/$2.{`seq -s"," 2 $3`} 
-                patch $2 .version/$2.{`seq -s"," 2 $3`}
+                #patch $2 .version/$2.{`seq -s"," 2 $3`}
+                for n in `seq 2 $3` ; do patch $2 .version/$2.$n; done
                 echo -e "Checked out version: $3"
             else
                 echo -e "No revision: $3"
