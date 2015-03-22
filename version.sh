@@ -39,7 +39,7 @@ case $1 in
                 for n in `seq 2 $3` ; do patch $2 .version/$2.$n; done
                 echo -e "Checked out version: $3"
             else
-                rev=`expr $(ls .version/$2.* | wc -l) - 1`
+                rev=`expr $(ls .version/$2.* | wc -l) - 2`
                 echo -e "No revision: $3, the latest one is $rev."
             fi
         fi
