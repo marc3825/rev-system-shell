@@ -19,11 +19,11 @@ case $1 in
             mkdir .version
         fi
 
-        if [ ! -d .version/$2.1 ] ; then
+        if [ ! -f .version/$2.1 ] ; then
             cp -f $2 .version/$2.1
             cp -f $2 .version/$2.latest
             echo -e "Added a new file under versioning: ’$2’"
-            echo "`date -R` | Added a new file under versioning: '$2'" > .version/$2.log
+            echo "`date -R` | Added a new file under versioning: '$2'" >> .version/$2.log
         else 
             echo -e "$2 is already in the versioning system."
         fi
