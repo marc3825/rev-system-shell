@@ -13,7 +13,7 @@ fi
 
 case $1 in
 
-    add ) 
+    add | a ) 
 
         if [ ! -d .version ] ; then 
             mkdir .version
@@ -62,7 +62,7 @@ case $1 in
         fi
         ;;
 
-    diff ) 
+    diff | d ) 
 
         if [ -f .version/$2.latest ] ; then
             diff -u .version/$2.latest $2
@@ -71,7 +71,7 @@ case $1 in
         fi
         ;;
 
-    log ) 
+    log | l ) 
 
         if [ -f .version/$2.log ] ; then
             nl -s": " .version/$2.log
@@ -80,7 +80,7 @@ case $1 in
         fi
         ;;
 
-    revert )
+    revert | r )
 
         if [ -f .version/$2.latest ] ; then
             if $(cmp -s $2 .version/$2.latest) ; then 
