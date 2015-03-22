@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 version=0.90
 
 if [ $# -lt 2 ] ; then
@@ -36,7 +36,8 @@ case $1 in
         else
             if [ -f .version/$2.$3 ] ; then
                 cp -f .version/$2.1 $2
-                patch -p0 < .version/$2.{`seq -s"," 2 $3`} 
+                #patch -p0 < .version/$2.{`seq -s"," 2 $3`} 
+                patch $2 .version/$2.{`seq -s"," 2 $3`}
                 echo -e "Checked out version: $3"
             else
                 echo -e "No revision: $3"
