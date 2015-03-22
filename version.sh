@@ -45,8 +45,8 @@ case $1 in
         ;;
 
     commit | ci )
-
-        if [ $(cmp -s $2 .version/$2.latest) ] ; then
+        
+        if $(cmp -s $2 .version/$2.latest) ; then
             echo -e "No change in $2."
             exit
         else
