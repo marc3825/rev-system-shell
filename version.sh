@@ -50,7 +50,7 @@ case $1 in
             echo -e "No change in $2."
             exit
         else
-            rev=`expr $(ls .version/$2.* | wc -l) - 2`
+            rev=`expr $(ls .version/$2.* | wc -l) - 1`
             ##diff -u .version/$2.`$rev -1` .version/$2.latest > .version/$2.$rev
             diff -u .version/$2.latest $2 > .version/$2.$rev
             cp -f $2 .version/$2.latest
