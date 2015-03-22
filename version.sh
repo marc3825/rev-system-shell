@@ -1,5 +1,5 @@
 #!/bin/sh
-version=0.81
+version=0.90
 
 if [ $# -lt 2 ] ; then
     echo -e "Usage: version.sh <cmd> <file> [option]\nwhere <cmd> can be: add checkout commit diff log revert rm"
@@ -45,10 +45,9 @@ case $1 in
         ;;
 
     commit | ci )
-        
+
         if $(cmp -s $2 .version/$2.latest) ; then
             echo -e "No change in $2."
-            exit
         else
             rev=`expr $(ls .version/$2.* | wc -l) - 1`
             diff -u .version/$2.latest $2 > .version/$2.$rev
@@ -85,14 +84,12 @@ case $1 in
         if [ -f .version/$2.latest ] ; then
             if $(cmp -s $2 .version/$2.latest) ; then 
                 echo "No change in the two version"
-                exit
             else
                 cp -f .version/$2.latest $2
                 echo -e "Reverted to the latest version"
             fi
         else
             echo -e "No previous revision"
-            exit
         fi
         ;;
 
@@ -109,5 +106,6 @@ case $1 in
             rmdir .version 2>/dev/null
     esac
     ;;
+
 * ) echo -e "Error! This command name does not exist: ’$1’" ;;
 esac
