@@ -83,7 +83,7 @@ case $1 in
     revert )
 
         if [ -f .version/$2.latest ] ; then
-            if [ cmp -s $2 .version/$2.latest ] ; then 
+            if $(cmp -s $2 .version/$2.latest) ; then 
                 echo "No change in the two version"
                 exit
             else
