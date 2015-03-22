@@ -49,7 +49,7 @@ case $1 in
     commit | ci )
 
         if $(cmp -s $2 .version/$2.latest) ; then
-            echo -e "No change in $2."
+            echo -e "No change in $2"
         else
             rev=`expr $(ls .version/$2.* | wc -l) - 1`
             diff -u .version/$2.latest $2 > .version/$2.$rev
