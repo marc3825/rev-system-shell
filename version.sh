@@ -6,7 +6,7 @@ if [ $# -lt 2 ] ; then
     exit
 fi
 
-if [ ! -f $2 ]; then
+if [ ! -f $2 ] ; then
     echo -e "Error! ’$2’ is not a file."
     exit
 fi
@@ -23,6 +23,7 @@ case $1 in
             cp -f $2 .version/$2.1
             cp -f $2 .version/$2.latest
             echo -e "Added a new file under versioning: ’$2’"
+            echo "`date -R` | Added a new file under versioning: '$2'" > .version/$2.log
         else 
             echo -e "$2 is already in the versioning system."
         fi
@@ -45,11 +46,11 @@ case $1 in
 
     commit | ci )
 
-        if [ cmp -s $2 .version/$2.latest ] ; then
-            echo -e "No change in $2,"
+        if [ $(cmp -s $2 .version/$2.latest) ] ; then
+            echo -e "No change in $2."
             exit
         else
-            rev=$(ls .version/$2.* | wc -l)+1
+            rev=`expr $(ls .version/$2.* | wc -l) - 2`
             ##diff -u .version/$2.`$rev -1` .version/$2.latest > .version/$2.$rev
             diff -u .version/$2.latest $2 > .version/$2.$rev
             cp -f $2 .version/$2.latest
@@ -103,7 +104,7 @@ case $1 in
             ##Si $yn commence par yYoO, execute. Permet de faire passer oui/yes/y etc
             o* | O* | y* | Y* ) 
             rm .version/$2.*
-            echo -e "’$1’ is not under versioning anymore."
+            echo -e "’$2’ is not under versioning anymore."
             ##Salon, mais ne s'execute pas si le dossier contient qqchose :p
             ##Redirige la sortie erreur vers le void pour ne pas afficher de message
             rmdir .version 2>/dev/null
