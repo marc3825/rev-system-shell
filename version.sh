@@ -1,5 +1,33 @@
 #!/bin/sh
-version=1.0
+version=1.1
+
+if [ ! -f /usr/local/version.sh ] ; then
+    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message."
+fi
+
+if [ $1 = hide ] ; then
+    sed -i '4s/^/#/' $0
+    sed -i '5s/^/#/' $0
+    sed -i '6s/^/#/' $0
+    echo -s "Installation message disabled.\nUse version.sh unhide to get it back"
+elif [ $1 = unhide ] ; then
+    sed -i '4s/#//' $0
+    sed -i '5s/#//' $0
+    sed -i '6s/#//' $0
+    echo "Installation message enabled."
+elif [ $1 = install ] ; then
+    if [ `whoami` != root ] ; then
+        echo "To be installed, this script need root access.\nPlease run sudo ./version.sh install"
+        exit
+    else
+        cp -f version.sh /usr/local/bin/version.sh
+        echo "Script installed as /usr/local/bin/version.sh"
+        chown root:root /usr/local/bin/version.sh
+        echo "Script owner changed to root."
+        chmod 755 /usr/local/bin/version.sh
+        echo -e "Script permission set to 755\nScript installation success!"
+    fi
+fi
 
 if [ $# -lt 2 ] ; then
     echo -e "Usage: version.sh <cmd> <file> [option]\nwhere <cmd> can be: add checkout commit diff log revert rm"
@@ -114,12 +142,9 @@ case $1 in
         echo -n "Are you sure you want to delete ’$2’ from versioning? (yes/no) "
         read yn
         case $yn in
-            ##Si $yn commence par yYoO, execute. Permet de faire passer oui/yes/y etc
             o* | O* | y* | Y* ) 
             rm .version/$2.*
             echo -e "’$2’ is not under versioning anymore."
-            ##Salon, mais ne s'execute pas si le dossier contient qqchose :p
-            ##Redirige la sortie erreur vers le void pour ne pas afficher de message
             rmdir .version 2>/dev/null
     esac
     ;;
