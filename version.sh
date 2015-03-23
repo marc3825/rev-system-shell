@@ -1,15 +1,15 @@
 #!/bin/sh
 version=1.1
 
-if [ ! -f /usr/local/version.sh ] ; then
-    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
-fi
+#if [ ! -f /usr/local/version.sh ] ; then
+#    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
+#fi
 
 if [ $1 = hide ] ; then
     sed -i '4s/^/#/' $0
     sed -i '5s/^/#/' $0
     sed -i '6s/^/#/' $0
-    echo -e "Installation message disabled.\nUse version.sh unhide to get it back"
+    echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
 elif [ $1 = unhide ] ; then
     sed -i '4s/#//' $0
     sed -i '5s/#//' $0
