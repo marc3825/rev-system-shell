@@ -1,5 +1,5 @@
-#!/bin/bash
-version=0.90
+#!/bin/sh
+version=1.0
 
 if [ $# -lt 2 ] ; then
     echo -e "Usage: version.sh <cmd> <file> [option]\nwhere <cmd> can be: add checkout commit diff log revert rm"
