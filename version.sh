@@ -7,14 +7,10 @@ fi
 
 if [ $1 ] ; then
     if [ $1 = hide ] ; then
-        sed -i '4s/^/#/' $0
-        sed -i '5s/^/#/' $0
-        sed -i '6s/^/#/' $0
+        sed -i '4,6s/^/#/' `readlink -f $0`
         echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
     elif [ $1 = unhide ] ; then
-        sed -i '4s/#//' $0
-        sed -i '5s/#//' $0
-        sed -i '6s/#//' $0
+        sed -i '4,6s/#//' `readlink -f $0`
         echo -e "Installation message enabled.\n"
     elif [ $1 = install ] ; then
         if [ `whoami` != root ] ; then
