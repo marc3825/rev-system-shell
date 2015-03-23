@@ -2,14 +2,14 @@
 version=1.1
 
 if [ ! -f /usr/local/version.sh ] ; then
-    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message."
+    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
 fi
 
 if [ $1 = hide ] ; then
     sed -i '4s/^/#/' $0
     sed -i '5s/^/#/' $0
     sed -i '6s/^/#/' $0
-    echo -s "Installation message disabled.\nUse version.sh unhide to get it back"
+    echo -e "Installation message disabled.\nUse version.sh unhide to get it back"
 elif [ $1 = unhide ] ; then
     sed -i '4s/#//' $0
     sed -i '5s/#//' $0
@@ -17,7 +17,7 @@ elif [ $1 = unhide ] ; then
     echo "Installation message enabled."
 elif [ $1 = install ] ; then
     if [ `whoami` != root ] ; then
-        echo "To be installed, this script need root access.\nPlease run sudo ./version.sh install"
+        echo -e "To be installed, this script need root access.\nPlease run sudo ./version.sh install"
         exit
     else
         cp -f version.sh /usr/local/bin/version.sh
