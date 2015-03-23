@@ -1,31 +1,33 @@
 #!/bin/sh
 version=1.1
 
-if [ ! -f /usr/local/version.sh ] ; then
-    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
-fi
+#if [ ! -f /usr/local/version.sh ] ; then
+#    echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
+#fi
 
-if [ $1 = hide ] ; then
-    sed -i '4s/^/#/' $0
-    sed -i '5s/^/#/' $0
-    sed -i '6s/^/#/' $0
-    echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
-elif [ $1 = unhide ] ; then
-    sed -i '4s/#//' $0
-    sed -i '5s/#//' $0
-    sed -i '6s/#//' $0
-    echo -e "Installation message enabled.\n"
-elif [ $1 = install ] ; then
-    if [ `whoami` != root ] ; then
-        echo -e "To be installed, this script need root access.\nPlease run sudo ./version.sh install"
-        exit
-    else
-        cp -f version.sh /usr/local/bin/version.sh
-        echo "Script installed as /usr/local/bin/version.sh"
-        chown root:root /usr/local/bin/version.sh
-        echo "Script owner changed to root."
-        chmod 755 /usr/local/bin/version.sh
-        echo -e "Script permission set to 755\nScript installation success!"
+if [ $1 ] ; then
+    if [ $1 = hide ] ; then
+        sed -i '4s/^/#/' $0
+        sed -i '5s/^/#/' $0
+        sed -i '6s/^/#/' $0
+        echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
+    elif [ $1 = unhide ] ; then
+        sed -i '4s/#//' $0
+        sed -i '5s/#//' $0
+        sed -i '6s/#//' $0
+        echo -e "Installation message enabled.\n"
+    elif [ $1 = install ] ; then
+        if [ `whoami` != root ] ; then
+            echo -e "To be installed, this script need root access.\nPlease run sudo ./version.sh install"
+            exit
+        else
+            cp -f version.sh /usr/local/bin/version.sh
+            echo "Script installed as /usr/local/bin/version.sh"
+            chown root:root /usr/local/bin/version.sh
+            echo "Script owner changed to root."
+            chmod 755 /usr/local/bin/version.sh
+            echo -e "Script permission set to 755\nScript installation success!"
+        fi
     fi
 fi
 
@@ -143,11 +145,11 @@ case $1 in
         read yn
         case $yn in
             o* | O* | y* | Y* ) 
-            rm .version/$2.*
-            echo -e "’$2’ is not under versioning anymore."
-            rmdir .version 2>/dev/null
-    esac
-    ;;
+                rm .version/$2.*
+                echo -e "’$2’ is not under versioning anymore."
+                rmdir .version 2>/dev/null
+        esac
+        ;;
 
-* ) echo -e "Error! This command name does not exist: ’$1’" ;;
+    * ) echo -e "Error! This command name does not exist: ’$1’" ;;
 esac
