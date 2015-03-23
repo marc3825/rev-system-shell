@@ -74,12 +74,12 @@ case $1 in
         if [ $# -ne 3 ] ; then 
             echo "Usage: version.sh checkout <file> <revision>"
         else
-            if [ -f $version_dir/$file_name.$3 ] ; then
-                cp -f $version_dir/$file_name.1 $file_name
+            rev=`expr $(ls $version_dir/$file_name.* | wc -l) - 2`
+            if [ $3 -le $rev ] ; then
+                cp -f $version_dir/$file_name.1 $file_loc
                 for n in `seq 2 $3` ; do patch $2 $version_dir/$file_name.$n; done
                 echo -e "Checked out version: $3"
             else
-                rev=`expr $(ls $version_dir/$file_name.* | wc -l) - 2`
                 echo -e "No revision: $3, the latest one is $rev."
             fi
         fi
