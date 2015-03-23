@@ -43,18 +43,19 @@ fi
 
 file_loc=`readlink -f $2`
 file_dir=`dirname $file_loc`
+version_dir=$file_dir/.version
 
 case $1 in
 
     add | a ) 
 
-        if [ ! -d $file_dir/.version ] ; then 
-            mkdir $file_dir/.version
+        if [ ! -d $version_dir ] ; then 
+            mkdir $version_dir
         fi
 
-        if [ ! -f $file_dir/.version/$2.1 ] ; then
-            cp -f $file_loc $file_dir/.version/$2.1
-            cp -f $file_loc $file_dir/.version/$2.latest
+        if [ ! -f $version_dir/$2.1 ] ; then
+            cp -f $file_loc $version_dir/$2.1
+            cp -f $file_loc $version_dir/$2.latest
             echo -e "Added a new file under versioning: ’$2’"
             echo "`date -R` | Added a new file under versioning: '$2'" >> .version/$2.log
         else 
@@ -64,7 +65,7 @@ case $1 in
 
     checkout | co ) 
 
-        if [ ! -d $file_dir/.version ] ; then
+        if [ ! -d $version_dir ] ; then
             echo -e "There is no file in the versionning system.\nPlease use version.sh add <file> to add one."
             exit
         fi
@@ -72,12 +73,12 @@ case $1 in
         if [ $# -ne 3 ] ; then 
             echo "Usage: version.sh checkout <file> <revision>"
         else
-            if [ -f $file_dir/.version/$2.$3 ] ; then
-                cp -f $file_dir/.version/$2.1 $2
+            if [ -f $version_dir/$2.$3 ] ; then
+                cp -f $version_dir/$2.1 $2
                 for n in `seq 2 $3` ; do patch $2 .version/$2.$n; done
                 echo -e "Checked out version: $3"
             else
-                rev=`expr $(ls $file_dir/.version/$2.* | wc -l) - 2`
+                rev=`expr $(ls $version_dir/$2.* | wc -l) - 2`
                 echo -e "No revision: $3, the latest one is $rev."
             fi
         fi
@@ -85,7 +86,7 @@ case $1 in
 
     commit | ci )
 
-        if [ ! -d $file_dir/.version ] ; then
+        if [ ! -d $version_dir ] ; then
             echo -e "There is no file in the versionning system.\nPlease use version.sh add <file> to add one."
             exit
         fi
@@ -93,13 +94,13 @@ case $1 in
         if $(cmp -s $2 .version/$2.latest) ; then
             echo -e "No change in $2"
         else
-            rev=`expr $(ls $file_dir/.version/$2.* | wc -l) - 1`
-            diff -u $file_dir/.version/$2.latest $2 > $file_dir/.version/$2.$rev
-            cp -f $2 $file_dir/.version/$2.latest
+            rev=`expr $(ls $version_dir/$2.* | wc -l) - 1`
+            diff -u $version_dir/$2.latest $2 > $version_dir/$2.$rev
+            cp -f $2 $version_dir/$2.latest
             if [ $# -eq 3 ] ; then
-                echo "`date -R` | $3" >> $file_dir/.version/$2.log
+                echo "`date -R` | $3" >> $version_dir/$2.log
             else
-                echo "`date -R` | Committed a new version: $rev" >> $file_dir/.version/$2.log
+                echo "`date -R` | Committed a new version: $rev" >> $version_dir/$2.log
             fi
             echo -e "Committed a new version: $rev"
         fi
@@ -107,8 +108,8 @@ case $1 in
 
     diff | d ) 
 
-        if [ -f $file_dir/.version/$2.latest ] ; then
-            diff -u $file_dir/.version/$2.latest $file_loc
+        if [ -f $version_dir/$2.latest ] ; then
+            diff -u $version_dir/$2.latest $file_loc
         else
             echo "No previous revision"
         fi
@@ -116,8 +117,8 @@ case $1 in
 
     log | l ) 
 
-        if [ -f $file_dir/.version/$2.log ] ; then
-            nl -s": " $file_dir/.version/$2.log
+        if [ -f $version_dir/$2.log ] ; then
+            nl -s": " $version_dir/$2.log
         else
             echo "No log file found for $2"
         fi
@@ -125,11 +126,11 @@ case $1 in
 
     revert | r )
 
-        if [ -f $file_dir/.version/$2.latest ] ; then
-            if $(cmp -s $file_loc $file_dir/.version/$2.latest) ; then 
+        if [ -f $version_dir/$2.latest ] ; then
+            if $(cmp -s $file_loc $version_dir/$2.latest) ; then 
                 echo "No change in the two version"
             else
-                cp -f $file_dir/.version/$2.latest $2
+                cp -f $version_dir/$2.latest $2
                 echo -e "Reverted to the latest version"
             fi
         else
@@ -139,7 +140,7 @@ case $1 in
 
     rm )
 
-        if [ ! -f $file_dir/.version/$2.1 ] ; then
+        if [ ! -f $version_dir/$2.1 ] ; then
             echo -e "$2 isn't in the versionning system."
             exit
         fi
@@ -148,9 +149,9 @@ case $1 in
         read yn
         case $yn in
             o* | O* | y* | Y* ) 
-                rm $file_dir/.version/$2.*
+                rm $version_dir/$2.*
                 echo -e "’$2’ is not under versioning anymore."
-                rmdir $file_dir/.version 2>/dev/null
+                rmdir $version_dir 2>/dev/null
         esac
         ;;
 
