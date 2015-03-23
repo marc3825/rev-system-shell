@@ -31,6 +31,11 @@ case $1 in
 
     checkout | co ) 
 
+        if [ ! -d .version ] ; then
+            echo -e "There is no file in the versionning system.\nPlease use version.sh add <file> to add one."
+            exit
+        fi
+
         if [ $# -ne 3 ] ; then 
             echo "Usage: version.sh checkout <file> <revision>"
         else
@@ -46,6 +51,11 @@ case $1 in
         ;;
 
     commit | ci )
+
+        if [ ! -d .version ] ; then
+            echo -e "There is no file in the versionning system.\nPlease use version.sh add <file> to add one."
+            exit
+        fi
 
         if $(cmp -s $2 .version/$2.latest) ; then
             echo -e "No change in $2"
@@ -94,7 +104,13 @@ case $1 in
         fi
         ;;
 
-    rm ) 
+    rm )
+
+        if [ ! -f .version/$2.1 ] ; then
+            echo -e "$2 isn't in the versionning system."
+            exit
+        fi
+
         echo -n "Are you sure you want to delete ’$2’ from versioning? (yes/no) "
         read yn
         case $yn in
