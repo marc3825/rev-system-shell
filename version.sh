@@ -27,6 +27,7 @@ if [ $1 ] ; then
             echo "Script owner changed to root."
             chmod 755 /usr/local/bin/version.sh
             echo -e "Script permission set to 755\nScript installation success!"
+            exit
         fi
     fi
 fi
