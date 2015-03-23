@@ -45,10 +45,6 @@ file_loc=`readlink -f $2`
 file_dir=`dirname $file_loc`
 file_name=`basename $2`
 version_dir=$file_dir/.version
-echo \n$file_loc
-echo $file_dir
-echo $file_name
-echo $version_dir\n
 
 case $1 in
 
