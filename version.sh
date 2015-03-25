@@ -91,7 +91,7 @@ case $1 in
         cp -f $file_loc $version_dir/$file_name.1
         cp -f $file_loc $version_dir/$file_name.latest
         echo -e "Added a new file under versioning: ’$file_name’"
-        echo "`date -R` | Added a new file under versioning: '$file_name'" >> .version/$2.log
+        echo "`date -R` | Added a new file under versioning: '$file_name'" >> $version_dir/$file_name.log
         ## Handle if the file's already here
     else 
         echo -e "$file_name is already in the versioning system."
