@@ -211,9 +211,13 @@ case $1 in
         echo -e "’$file_name’ is not under versioning anymore."
         ## rm the folder, don' t work if it's not empty. stderr throwed to the void
         rmdir $version_dir 2>/dev/null
-esac
-;;
+        ;;
+        *)
+        echo "no delete done."
+        ;;
+    esac
+    ;;
 
-## Ignore all other case
-* ) echo -e "Error! This command name does not exist: ’$1’" ;;
+    ## Ignore all other case
+    * ) echo -e "Error! This command name does not exist: ’$1’" ;;
 esac
