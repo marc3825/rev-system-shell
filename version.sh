@@ -118,7 +118,7 @@ case $1 in
             ## Revert $2 to his original state
             cp -f $version_dir/$file_name.1 $file_loc
             ## Apply patch from 2 to $3 consecutively
-            for n in `seq 2 $3` ; do patch $2 $version_dir/$file_name.$n; done
+            for n in `seq 2 $3` ; do patch $file_loc $version_dir/$file_name.$n; done
             echo -e "Checked out version: $3"
             ## If the desired rev is > of the latest saved, print the latest
         else
