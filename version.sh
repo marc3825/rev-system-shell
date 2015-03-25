@@ -62,7 +62,7 @@ fi
 
 ## Check if the second argument is a file
 if [ ! -f $2 ] ; then
-    echo -e "Error! ’$2’ is not a file."
+    echo "Error! ’$2’ is not a file."
     exit
 fi
 
@@ -90,11 +90,11 @@ case $1 in
     if [ ! -f $version_dir/$file_name.1 ] ; then
         cp -f $file_loc $version_dir/$file_name.1
         cp -f $file_loc $version_dir/$file_name.latest
-        echo -e "Added a new file under versioning: ’$file_name’"
+        echo "Added a new file under versioning: ’$file_name’"
         echo "`date -R` | Added a new file under versioning: '$file_name'" >> $version_dir/$file_name.log
         ## Handle if the file's already here
     else 
-        echo -e "$file_name is already in the versioning system."
+        echo "$file_name is already in the versioning system."
     fi
     ;;
 
@@ -119,10 +119,10 @@ case $1 in
             cp -f $version_dir/$file_name.1 $file_loc
             ## Apply patch from 2 to $3 consecutively
             for n in `seq 2 $3` ; do patch $file_loc $version_dir/$file_name.$n; done
-            echo -e "Checked out version: $3"
+            echo "Checked out version: $3"
             ## If the desired rev is > of the latest saved, print the latest
         else
-            echo -e "No revision: $3, the latest one is $rev."
+            echo "No revision: $3, the latest one is $rev."
         fi
     fi
     ;;
@@ -139,7 +139,7 @@ case $1 in
     ## Check if there are change between $2 and the latest rev
     ## cmp -s to get a boolean return instead of a detailed output
     if $(cmp -s $file_loc $version_dir/$file_name.latest) ; then
-        echo -e "No change in $file_name"
+        echo "No change in $file_name"
     else
         ## $rev is this rev number.
         rev=`expr $(ls $version_dir/$file_name.* | wc -l) - 1`
@@ -153,7 +153,7 @@ case $1 in
         else
             echo "`date -R` | Committed a new version: $rev" >> $version_dir/$file_name.log
         fi
-        echo -e "Committed a new version: $rev"
+        echo "Committed a new version: $rev"
     fi
     ;;
 
@@ -186,10 +186,10 @@ case $1 in
             echo "No change in the two version"
         else
             cp -f $version_dir/$file_name.latest $file_loc
-            echo -e "Reverted to the latest version"
+            echo "Reverted to the latest version"
         fi
     else
-        echo -e "No previous revision"
+        echo "No previous revision"
     fi
     ;;
 
@@ -197,7 +197,7 @@ case $1 in
     rm )
 
     if [ ! -f $version_dir/$file_name.1 ] ; then
-        echo -e "$file_name isn't in the versionning system."
+        echo "$file_name isn't in the versionning system."
         exit
     fi
 
@@ -208,12 +208,14 @@ case $1 in
         ## Allow all words beginning by yY, it's faster
         y* | Y* ) 
         rm $version_dir/$file_name.*
-        echo -e "’$file_name’ is not under versioning anymore."
+        echo "’$file_name’ is not under versioning anymore."
         ## rm the folder, don' t work if it's not empty. stderr throwed to the void
         rmdir $version_dir 2>/dev/null
-esac
-;;
+    
+    esac
+    ;;
 
 ## Ignore all other case
-* ) echo -e "Error! This command name does not exist: ’$1’" ;;
+* ) echo "Error! This command name does not exist: ’$1’" ;;
+
 esac
