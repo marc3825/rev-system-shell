@@ -13,7 +13,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 ## Vars: script location and install location
 ## INSTALL_LOC can be changed to any dir, but it need to be in $PATH
 ## to work everywhere (other standard: /bin, /usr/bin)
