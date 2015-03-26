@@ -17,6 +17,7 @@
 ## Vars: script location and install location
 ## INSTALL_LOC can be changed to any dir, but it need to be in $PATH
 ## to work everywhere (other standard: /bin, /usr/bin)
+## hide is used as a static var for showing installation message.
 hide=0 ## must be line 20.
 script_loc=`readlink -f $0`
 INSTALL_LOC=/usr/local/bin/version.sh
@@ -25,10 +26,10 @@ INSTALL_LOC=/usr/local/bin/version.sh
 if [ $1 ] ; then
 	## To hide or unhide the installation text, we use static var "hide" declared line 20.
 	if [ $1 = hide ] ; then
-		sed -i '20s/hide=0/hide=1/' $script_loc 
+		sed -i '20s/0/1/' $script_loc 
 		echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
 	elif [ $1 = unhide ] ; then
-		sed -i '20s/hide=1/hide=0/' $script_loc 
+		sed -i '20s/1/0/' $script_loc 
 		echo -e "Installation message enabled.\n"
 		## Installer
 	elif [ $1 = install ] ; then
