@@ -17,18 +17,18 @@
 ## Vars: script location and install location
 ## INSTALL_LOC can be changed to any dir, but it need to be in $PATH
 ## to work everywhere (other standard: /bin, /usr/bin)
+hide=0 ## must be line 20.
 script_loc=`readlink -f $0`
 INSTALL_LOC=/usr/local/bin/version.sh
 
 ## Manage the installation/installation request
 if [ $1 ] ; then
+	## To hide or unhide the installation text, we use static var "hide" declared line 20.
 	if [ $1 = hide ] ; then
-		## To hide the text, we comment the lines of the test and the echo
-		sed -i '53,55s/^/#/' $script_loc 
+		sed -i '20s/hide=0/hide=1/' $script_loc 
 		echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
-		## To get it back we remove the #
 	elif [ $1 = unhide ] ; then
-		sed -i '53,55s/#//' $script_loc
+		sed -i '20s/hide=1/hide=0/' $script_loc 
 		echo -e "Installation message enabled.\n"
 		## Installer
 	elif [ $1 = install ] ; then
@@ -49,9 +49,11 @@ if [ $1 ] ; then
 	fi
 fi
 
-## Installation status check, commented/uncommented by hide/unhide  
-if [ $script_loc != $INSTALL_LOC ] ; then
-	echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
+## Installation status check, commented/uncommented by hide/unhide
+if [$hide -eq 0] ; then
+	if [ $script_loc != $INSTALL_LOC ] ; then
+		echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
+	fi
 fi
 
 ## If there is under 2 arguments, tell how's working the program
