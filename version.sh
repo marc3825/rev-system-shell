@@ -25,10 +25,12 @@ INSTALL_LOC=/usr/local/bin/version.sh
 if [ $1 ] ; then
 	## To hide or unhide the installation text, we use static var "hide" declared line 20.
 	if [ $1 = hide ] ; then
-		sed -i '20s/0/1/' $script_loc 
+		sed -i '20s/=0/=1/' $script_loc 
+		hide=1
 		echo -e "Installation message disabled.\nUse version.sh unhide to get it back\n"
 	elif [ $1 = unhide ] ; then
-		sed -i '20s/1/0/' $script_loc 
+		sed -i '20s/=1/=0/' $script_loc 
+		hide=0
 		echo -e "Installation message enabled.\n"
 		## Installer
 	elif [ $1 = install ] ; then
@@ -50,7 +52,7 @@ if [ $1 ] ; then
 fi
 
 ## Installation status check, commented/uncommented by hide/unhide
-if [$hide -eq 0] ; then
+if [ $hide -eq 0 ] ; then
 	if [ $script_loc != $INSTALL_LOC ] ; then
 		echo -e "It seems this script isn't installed\nRun version.sh install with root privilege to install it.\nUse version.sh hide to hide this message.\n"
 	fi
